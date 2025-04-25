@@ -1,0 +1,12 @@
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\bin\Debug\net6.0\Vehiculo.deps.json
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\bin\Debug\net6.0\Vehiculo.dll
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\bin\Debug\net6.0\Vehiculo.pdb
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\Vehiculo.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\Vehiculo.AssemblyInfoInputs.cache
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\Vehiculo.AssemblyInfo.cs
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\Vehiculo.csproj.CoreCompileInputs.cache
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\Vehiculo.sourcelink.json
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\Vehiculo.dll
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\refint\Vehiculo.dll
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\Vehiculo.pdb
+C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\obj\Debug\net6.0\ref\Vehiculo.dll

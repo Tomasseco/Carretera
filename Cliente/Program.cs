@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Net;
-using System.Text;
-using System.IO;
-using System.Threading;
-using NetworkStreamNS;
-using CarreteraClass;
-using VehiculoClass;
 
 namespace Client
 {
+    // Conectando el cliente al servidor
     class Program
     {
-
         static void Main(string[] args)
         {
+            string servidorIP = "127.0.0.1";
+            int puerto = 5000;
 
+            TcpClient cliente = new TcpClient();
+            cliente.Connect(servidorIP, puerto);
+
+            Console.WriteLine("Conectado al servidor");
+
+            cliente.Close();
         }
-
     }
 }
