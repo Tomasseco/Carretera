@@ -1,11 +1,10 @@
-﻿// Servidor/Program.cs
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace Servidor
 {
-    // Servidor TCP que escucha a un un cliente
     class Program
     {
         static void Main(string[] args)
@@ -16,12 +15,25 @@ namespace Servidor
             listener.Start();
             Console.WriteLine("Servidor escuchando en puerto " + puerto);
 
-            TcpClient cliente = listener.AcceptTcpClient();
-            Console.WriteLine("Cliente conectado desde " + cliente.Client.RemoteEndPoint);
+            while (true)
+            {
+                TcpClient nuevoCliente = listener.AcceptTcpClient();
+                Console.WriteLine("Nuevo cliente conectado desde " + nuevoCliente.Client.RemoteEndPoint);
 
-            // Cerrar conexiones para este ejemplo
-            cliente.Close();
-            listener.Stop();
+                // Crea un hilo para gestionar este cliente
+                Thread hiloCliente = new Thread(() => GestionarCliente(nuevoCliente));
+                hiloCliente.Start();
+            }
+        }
+
+        static void GestionarCliente(TcpClient cliente)
+        {
+            Console.WriteLine("Gestionando nuevo vehículo...");
+
+            // Aquí más adelante se gestionará la lógica del cliente
+
+            cliente.Close(); 
+            Console.WriteLine("Cliente desconectado");
         }
     }
 }
