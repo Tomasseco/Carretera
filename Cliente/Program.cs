@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Net;
+using System.Text;
 using NetworkStreamNS;
 
 namespace Client
@@ -8,27 +10,29 @@ namespace Client
     {
         static void Main(string[] args)
         {
-            string servidorIP = "127.0.0.1";
-            int puerto = 5000;
+            try
+            {
+                Console.WriteLine("Conectando al servidor...");
+                TcpClient cliente = new TcpClient("127.0.0.1", 5000);
+                NetworkStream ns = cliente.GetStream();
 
-            TcpClient cliente = new TcpClient();
-            cliente.Connect(servidorIP, puerto);
-            Console.WriteLine("Conectado al servidor");
+                Console.WriteLine("Conectado al servidor. Enviando mensaje de inicio...");
 
-            NetworkStream stream = cliente.GetStream();
-            Console.WriteLine("[Cliente] NetworkStream obtenido");
+                // Handshake
+                NetworkStreamClass.EscribirMensajeNetworkStream(ns, "INICIO");
 
-            // Handshake
-            NetworkStreamClass.EscribirMensajeNetworkStream(stream, "INICIO");
-            Console.WriteLine("[Cliente] Enviado: INICIO");
+                string idRecibido = NetworkStreamClass.LeerMensajeNetworkStream(ns);
+                Console.WriteLine($"ID recibido del servidor: {idRecibido}");
 
-            string idRecibido = NetworkStreamClass.LeerMensajeNetworkStream(stream);
-            Console.WriteLine($"[Cliente] ID recibido del servidor: {idRecibido}");
+                // Confirmación
+                NetworkStreamClass.EscribirMensajeNetworkStream(ns, idRecibido);
 
-            NetworkStreamClass.EscribirMensajeNetworkStream(stream, idRecibido);
-            Console.WriteLine("[Cliente] Confirmación de ID enviada");
-
-            cliente.Close();
+                Console.WriteLine("Handshake completado. Cliente listo.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
         }
     }
 }

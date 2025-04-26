@@ -1,72 +1,66 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Threading;
 using NetworkStreamNS;
 
 namespace Servidor
 {
     class Program
     {
-        static int siguienteId = 1;
-        static object lockId = new object();
-        static Random random = new Random();
+        static TcpListener listener;
+        static List<Cliente> clientesConectados = new List<Cliente>();
+        static int contadorIds = 0;
+        static object lockClientes = new object();
 
         static void Main(string[] args)
         {
-            int puerto = 5000;
-            TcpListener listener = new TcpListener(IPAddress.Any, puerto);
-
+            Console.WriteLine("Iniciando servidor...");
+            listener = new TcpListener(IPAddress.Any, 5000);
             listener.Start();
-            Console.WriteLine("Servidor escuchando en puerto " + puerto);
+
+            Console.WriteLine("Servidor esperando conexiones...");
 
             while (true)
             {
-                TcpClient nuevoCliente = listener.AcceptTcpClient();
-                Console.WriteLine("Nuevo cliente conectado desde " + nuevoCliente.Client.RemoteEndPoint);
-
-                Thread hiloCliente = new Thread(() => GestionarCliente(nuevoCliente));
-                hiloCliente.Start();
+                TcpClient clienteTcp = listener.AcceptTcpClient();
+                Thread hilo = new Thread(() => GestionarCliente(clienteTcp));
+                hilo.Start();
             }
         }
 
-        static void GestionarCliente(TcpClient cliente)
+        static void GestionarCliente(TcpClient clienteTcp)
         {
-            int idAsignado;
-            string direccion;
+            Console.WriteLine("Vehículo conectado. Gestionando nuevo vehículo...");
 
-            lock (lockId)
+            NetworkStream ns = clienteTcp.GetStream();
+            int idAsignado;
+
+            lock (lockClientes)
             {
-                idAsignado = siguienteId++;
+                idAsignado = ++contadorIds;
+                Cliente nuevoCliente = new Cliente(idAsignado, ns);
+                clientesConectados.Add(nuevoCliente);
+                Console.WriteLine($"Vehículo ID {idAsignado} conectado. Total: {clientesConectados.Count}");
             }
 
-            direccion = (random.Next(2) == 0) ? "norte" : "sur";
-
-            Console.WriteLine($"Gestionando nuevo vehículo... ID: {idAsignado}, Dirección: {direccion}");
-
-            NetworkStream stream = cliente.GetStream();
-
             // Handshake
-            string mensajeInicio = NetworkStreamClass.LeerMensajeNetworkStream(stream);
-            Console.WriteLine($"[Servidor] Recibido del cliente: {mensajeInicio}");
-
-            if (mensajeInicio == "INICIO")
+            string mensaje = NetworkStreamClass.LeerMensajeNetworkStream(ns);
+            if (mensaje == "INICIO")
             {
-                NetworkStreamClass.EscribirMensajeNetworkStream(stream, idAsignado.ToString());
-                Console.WriteLine($"[Servidor] Enviado ID: {idAsignado}");
+                Console.WriteLine($"Handshake iniciado con el vehículo ID {idAsignado}");
+                NetworkStreamClass.EscribirMensajeNetworkStream(ns, idAsignado.ToString());
 
-                string confirmacion = NetworkStreamClass.LeerMensajeNetworkStream(stream);
+                string confirmacion = NetworkStreamClass.LeerMensajeNetworkStream(ns);
                 if (confirmacion == idAsignado.ToString())
                 {
-                    Console.WriteLine($"[Servidor] Handshake correcto con vehículo ID: {idAsignado}");
+                    Console.WriteLine($"Handshake completado con vehículo ID {idAsignado}");
                 }
                 else
                 {
-                    Console.WriteLine("[Servidor] ERROR: ID confirmado no coincide.");
+                    Console.WriteLine($"Error de handshake con vehículo ID {idAsignado}");
                 }
             }
 
-            cliente.Close();
+         
         }
     }
 }
