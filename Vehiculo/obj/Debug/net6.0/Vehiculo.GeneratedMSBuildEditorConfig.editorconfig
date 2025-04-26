@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Vehiculo
-build_property.ProjectDir = C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\Carretera\Vehiculo\
+build_property.ProjectDir = C:\Users\Programacion\Desktop\M09-UF3-Pr01\Practica\carretera\Vehiculo\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

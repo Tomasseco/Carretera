@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.IO;
 
 namespace Client
 {
-    // Conectando el cliente al servidor
     class Program
     {
         static void Main(string[] args)
@@ -11,12 +11,25 @@ namespace Client
             string servidorIP = "127.0.0.1";
             int puerto = 5000;
 
-            TcpClient cliente = new TcpClient();
-            cliente.Connect(servidorIP, puerto);
+            try
+            {
+                TcpClient cliente = new TcpClient();
+                cliente.Connect(servidorIP, puerto);
 
-            Console.WriteLine("Conectado al servidor");
+                Console.WriteLine("Conectado al servidor.");
 
-            cliente.Close();
+                // Obtenemos NetworkStream
+                NetworkStream stream = cliente.GetStream();
+                Console.WriteLine("NetworkStream obtenido.");
+
+  
+                stream.Close();
+                cliente.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al conectar: " + ex.Message);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.IO;
 
 namespace Servidor
 {
@@ -34,19 +35,28 @@ namespace Servidor
             int idAsignado;
             string direccion;
 
-            // Lock para los IDs
             lock (lockId)
             {
                 idAsignado = siguienteId++;
             }
 
-            // Ahora norte o sur
             direccion = (random.Next(2) == 0) ? "norte" : "sur";
-
             Console.WriteLine($"Gestionando nuevo vehículo... ID: {idAsignado}, Dirección: {direccion}");
-        
 
-            cliente.Close();
+            try
+            {
+                // Obteneemosmos el NetworkStream del cliente
+                NetworkStream stream = cliente.GetStream();
+                Console.WriteLine($"NetworkStream obtenido para ID: {idAsignado}");
+
+            
+                stream.Close();
+                cliente.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error gestionando cliente: " + ex.Message);
+            }
         }
     }
 }

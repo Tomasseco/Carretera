@@ -51,11 +51,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\NetworkStreamClass\\NetworkStreamClass.csproj",
+      "projectUniqueName": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\NetworkStreamClass\\NetworkStreamClass.csproj",
       "projectName": "NetworkStreamClass",
-      "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\NetworkStreamClass\\NetworkStreamClass.csproj",
+      "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\NetworkStreamClass\\NetworkStreamClass.csproj",
       "packagesPath": "C:\\Users\\Programacion\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\NetworkStreamClass\\obj\\",
+      "outputPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\NetworkStreamClass\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Programacion\\AppData\\Roaming\\NuGet\\NuGet.Config"
