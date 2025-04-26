@@ -7,6 +7,10 @@ namespace Servidor
 {
     class Program
     {
+        static int siguienteId = 1;
+        static object lockId = new object();
+        static Random random = new Random();
+
         static void Main(string[] args)
         {
             int puerto = 5000;
@@ -20,7 +24,6 @@ namespace Servidor
                 TcpClient nuevoCliente = listener.AcceptTcpClient();
                 Console.WriteLine("Nuevo cliente conectado desde " + nuevoCliente.Client.RemoteEndPoint);
 
-                // Crea un hilo para gestionar este cliente
                 Thread hiloCliente = new Thread(() => GestionarCliente(nuevoCliente));
                 hiloCliente.Start();
             }
@@ -28,12 +31,22 @@ namespace Servidor
 
         static void GestionarCliente(TcpClient cliente)
         {
-            Console.WriteLine("Gestionando nuevo vehículo...");
+            int idAsignado;
+            string direccion;
 
-            // Aquí más adelante se gestionará la lógica del cliente
+            // Lock para los IDs
+            lock (lockId)
+            {
+                idAsignado = siguienteId++;
+            }
 
-            cliente.Close(); 
-            Console.WriteLine("Cliente desconectado");
+            // Ahora norte o sur
+            direccion = (random.Next(2) == 0) ? "norte" : "sur";
+
+            Console.WriteLine($"Gestionando nuevo vehículo... ID: {idAsignado}, Dirección: {direccion}");
+        
+
+            cliente.Close();
         }
     }
 }
