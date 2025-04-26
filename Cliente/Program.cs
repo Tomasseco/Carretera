@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.IO;
+using NetworkStreamNS;
 
 namespace Client
 {
@@ -11,25 +11,24 @@ namespace Client
             string servidorIP = "127.0.0.1";
             int puerto = 5000;
 
-            try
-            {
-                TcpClient cliente = new TcpClient();
-                cliente.Connect(servidorIP, puerto);
+            TcpClient cliente = new TcpClient();
+            cliente.Connect(servidorIP, puerto);
+            Console.WriteLine("Conectado al servidor");
 
-                Console.WriteLine("Conectado al servidor.");
+            NetworkStream stream = cliente.GetStream();
+            Console.WriteLine("[Cliente] NetworkStream obtenido");
 
-                // Obtenemos NetworkStream
-                NetworkStream stream = cliente.GetStream();
-                Console.WriteLine("NetworkStream obtenido.");
+            // Handshake
+            NetworkStreamClass.EscribirMensajeNetworkStream(stream, "INICIO");
+            Console.WriteLine("[Cliente] Enviado: INICIO");
 
-  
-                stream.Close();
-                cliente.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error al conectar: " + ex.Message);
-            }
+            string idRecibido = NetworkStreamClass.LeerMensajeNetworkStream(stream);
+            Console.WriteLine($"[Cliente] ID recibido del servidor: {idRecibido}");
+
+            NetworkStreamClass.EscribirMensajeNetworkStream(stream, idRecibido);
+            Console.WriteLine("[Cliente] Confirmación de ID enviada");
+
+            cliente.Close();
         }
     }
 }

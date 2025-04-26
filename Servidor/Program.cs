@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.IO;
+using NetworkStreamNS;
 
 namespace Servidor
 {
@@ -41,22 +41,32 @@ namespace Servidor
             }
 
             direccion = (random.Next(2) == 0) ? "norte" : "sur";
+
             Console.WriteLine($"Gestionando nuevo vehículo... ID: {idAsignado}, Dirección: {direccion}");
 
-            try
-            {
-                // Obteneemosmos el NetworkStream del cliente
-                NetworkStream stream = cliente.GetStream();
-                Console.WriteLine($"NetworkStream obtenido para ID: {idAsignado}");
+            NetworkStream stream = cliente.GetStream();
 
-            
-                stream.Close();
-                cliente.Close();
-            }
-            catch (Exception ex)
+            // Handshake
+            string mensajeInicio = NetworkStreamClass.LeerMensajeNetworkStream(stream);
+            Console.WriteLine($"[Servidor] Recibido del cliente: {mensajeInicio}");
+
+            if (mensajeInicio == "INICIO")
             {
-                Console.WriteLine("Error gestionando cliente: " + ex.Message);
+                NetworkStreamClass.EscribirMensajeNetworkStream(stream, idAsignado.ToString());
+                Console.WriteLine($"[Servidor] Enviado ID: {idAsignado}");
+
+                string confirmacion = NetworkStreamClass.LeerMensajeNetworkStream(stream);
+                if (confirmacion == idAsignado.ToString())
+                {
+                    Console.WriteLine($"[Servidor] Handshake correcto con vehículo ID: {idAsignado}");
+                }
+                else
+                {
+                    Console.WriteLine("[Servidor] ERROR: ID confirmado no coincide.");
+                }
             }
+
+            cliente.Close();
         }
     }
 }

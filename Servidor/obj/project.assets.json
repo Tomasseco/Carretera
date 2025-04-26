@@ -71,11 +71,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Servidor\\Servidor.csproj",
+      "projectUniqueName": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\servidor\\Servidor.csproj",
       "projectName": "Servidor",
-      "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Servidor\\Servidor.csproj",
+      "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\servidor\\Servidor.csproj",
       "packagesPath": "C:\\Users\\Programacion\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Servidor\\obj\\",
+      "outputPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\servidor\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Programacion\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -90,14 +90,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\Carretera.csproj": {
-              "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\Carretera.csproj"
+            "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\Carretera.csproj": {
+              "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\Carretera.csproj"
             },
             "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\NetworkStreamClass\\NetworkStreamClass.csproj": {
               "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\NetworkStreamClass\\NetworkStreamClass.csproj"
             },
-            "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Vehiculo\\Vehiculo.csproj": {
-              "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Vehiculo\\Vehiculo.csproj"
+            "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Vehiculo\\Vehiculo.csproj": {
+              "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Vehiculo\\Vehiculo.csproj"
             }
           }
         }
