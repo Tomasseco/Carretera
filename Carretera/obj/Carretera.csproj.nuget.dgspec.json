@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\Carretera.csproj": {}
+    "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\Carretera.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\Carretera.csproj": {
+    "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\Carretera.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\Carretera.csproj",
+        "projectUniqueName": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\Carretera.csproj",
         "projectName": "Carretera",
-        "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\Carretera.csproj",
+        "projectPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\Carretera.csproj",
         "packagesPath": "C:\\Users\\Programacion\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\obj\\",
+        "outputPath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Programacion\\AppData\\Roaming\\NuGet\\NuGet.Config"
