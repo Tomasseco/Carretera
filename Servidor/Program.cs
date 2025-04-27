@@ -1,6 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using NetworkStreamNS;
+using VehiculoClass;
+using CarreteraClass;
 
 namespace Servidor
 {
@@ -10,6 +13,8 @@ namespace Servidor
         static List<Cliente> clientesConectados = new List<Cliente>();
         static int contadorIds = 0;
         static object lockClientes = new object();
+        static Carretera carretera = new Carretera();
+        static object lockCarretera = new object(); 
 
         static void Main(string[] args)
         {
@@ -53,14 +58,24 @@ namespace Servidor
                 if (confirmacion == idAsignado.ToString())
                 {
                     Console.WriteLine($"Handshake completado con vehículo ID {idAsignado}");
+
+                    // Recibir el vehículo después del handshake =======================
+                    Vehiculo nuevoVehiculo = NetworkStreamClass.LeerDatosVehiculoNS(ns);
+                    Console.WriteLine($"Vehículo recibido: ID={nuevoVehiculo.Id}, Dirección={nuevoVehiculo.Direccion}, Velocidad={nuevoVehiculo.Velocidad}");
+
+                    lock (lockCarretera)
+                    {
+                        carretera.AñadirVehiculo(nuevoVehiculo);
+                        Console.WriteLine("Vehículo añadido a la carretera.");
+                        carretera.MostrarVehiculos(); 
+                    }
+                    // ================================================================
                 }
                 else
                 {
                     Console.WriteLine($"Error de handshake con vehículo ID {idAsignado}");
                 }
             }
-
-         
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using NetworkStreamNS;
+using VehiculoClass; // Necesario para usar la clase Vehiculo
 
 namespace Client
 {
@@ -27,7 +28,25 @@ namespace Client
                 // Confirmación
                 NetworkStreamClass.EscribirMensajeNetworkStream(ns, idRecibido);
 
-                Console.WriteLine("Handshake completado. Cliente listo.");
+                Console.WriteLine("Handshake completado. Creando vehículo...");
+
+                // Crear el vehículo usando el ID recibido
+                int idVehiculo = int.Parse(idRecibido);
+                string direccion = (new Random().Next(0, 2) == 0) ? "Norte" : "Sur";
+
+                Vehiculo miVehiculo = new Vehiculo(idVehiculo, direccion);
+
+                Console.WriteLine($"Vehículo creado: ID={miVehiculo.Id}, Dirección={miVehiculo.Direccion}, Velocidad={miVehiculo.Velocidad}");
+
+                // Enviar el vehículo al servidor
+                NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
+
+                Console.WriteLine("Vehículo enviado al servidor.");
+
+                // Aquí podrías esperar actualizaciones de la carretera si quieres
+                // Por ahora cerramos
+                ns.Close();
+                cliente.Close();
             }
             catch (Exception ex)
             {
