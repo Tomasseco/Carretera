@@ -2,8 +2,9 @@
 using System.Net.Sockets;
 using System.Net;
 using System.Text;
+using System.Threading;
 using NetworkStreamNS;
-using VehiculoClass; // Necesario para usar la clase Vehiculo
+using VehiculoClass;
 
 namespace Client
 {
@@ -18,34 +19,33 @@ namespace Client
                 NetworkStream ns = cliente.GetStream();
 
                 Console.WriteLine("Conectado al servidor. Enviando mensaje de inicio...");
-
-                // Handshake
                 NetworkStreamClass.EscribirMensajeNetworkStream(ns, "INICIO");
 
                 string idRecibido = NetworkStreamClass.LeerMensajeNetworkStream(ns);
                 Console.WriteLine($"ID recibido del servidor: {idRecibido}");
 
-                // Confirmación
                 NetworkStreamClass.EscribirMensajeNetworkStream(ns, idRecibido);
 
                 Console.WriteLine("Handshake completado. Creando vehículo...");
 
-                // Crear el vehículo usando el ID recibido
-                int idVehiculo = int.Parse(idRecibido);
-                string direccion = (new Random().Next(0, 2) == 0) ? "Norte" : "Sur";
-
-                Vehiculo miVehiculo = new Vehiculo(idVehiculo, direccion);
-
-                Console.WriteLine($"Vehículo creado: ID={miVehiculo.Id}, Dirección={miVehiculo.Direccion}, Velocidad={miVehiculo.Velocidad}");
-
-                // Enviar el vehículo al servidor
+                Vehiculo miVehiculo = new Vehiculo(int.Parse(idRecibido), "Norte");
                 NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
 
-                Console.WriteLine("Vehículo enviado al servidor.");
+                while (!miVehiculo.Acabado)
+                {
+                    miVehiculo.Pos++;
 
-                // Aquí podrías esperar actualizaciones de la carretera si quieres
-                // Por ahora cerramos
-                ns.Close();
+                    if (miVehiculo.Pos >= 100)
+                    {
+                        miVehiculo.Acabado = true;
+                    }
+
+                    NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
+
+                    Thread.Sleep(miVehiculo.Velocidad);
+                }
+
+                Console.WriteLine("Vehículo ha terminado su recorrido.");
                 cliente.Close();
             }
             catch (Exception ex)

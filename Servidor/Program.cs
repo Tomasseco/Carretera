@@ -14,7 +14,7 @@ namespace Servidor
         static int contadorIds = 0;
         static object lockClientes = new object();
         static Carretera carretera = new Carretera();
-        static object lockCarretera = new object(); 
+        static object lockCarretera = new object();
 
         static void Main(string[] args)
         {
@@ -47,7 +47,6 @@ namespace Servidor
                 Console.WriteLine($"Vehículo ID {idAsignado} conectado. Total: {clientesConectados.Count}");
             }
 
-            // Handshake
             string mensaje = NetworkStreamClass.LeerMensajeNetworkStream(ns);
             if (mensaje == "INICIO")
             {
@@ -59,7 +58,6 @@ namespace Servidor
                 {
                     Console.WriteLine($"Handshake completado con vehículo ID {idAsignado}");
 
-                    // Recibir el vehículo después del handshake =======================
                     Vehiculo nuevoVehiculo = NetworkStreamClass.LeerDatosVehiculoNS(ns);
                     Console.WriteLine($"Vehículo recibido: ID={nuevoVehiculo.Id}, Dirección={nuevoVehiculo.Direccion}, Velocidad={nuevoVehiculo.Velocidad}");
 
@@ -67,9 +65,26 @@ namespace Servidor
                     {
                         carretera.AñadirVehiculo(nuevoVehiculo);
                         Console.WriteLine("Vehículo añadido a la carretera.");
-                        carretera.MostrarVehiculos(); 
+                        carretera.MostrarVehiculos();
                     }
-                    // ================================================================
+
+                    bool terminado = false;
+                    while (!terminado)
+                    {
+                        Vehiculo vehiculoActualizado = NetworkStreamClass.LeerDatosVehiculoNS(ns);
+
+                        lock (lockCarretera)
+                        {
+                            carretera.ActualizarVehiculo(vehiculoActualizado);
+                            carretera.MostrarVehiculos();
+                        }
+
+                        if (vehiculoActualizado.Acabado)
+                        {
+                            terminado = true;
+                            Console.WriteLine($"Vehículo ID {vehiculoActualizado.Id} ha terminado su recorrido.");
+                        }
+                    }
                 }
                 else
                 {

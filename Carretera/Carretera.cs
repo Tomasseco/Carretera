@@ -38,6 +38,7 @@ namespace CarreteraClass
         // Mostrar todos los vehículos de la carretera
         public void MostrarVehiculos()
         {
+            Console.Clear();
             // Como no podemos enumerar directamente una PriorityQueue, clonamos para mostrar
             var copiaVehiculos = new List<VehiculoClass.Vehiculo>();
 
