@@ -38,7 +38,7 @@ namespace CarreteraClass
         // Mostrar todos los vehículos de la carretera
         public void MostrarVehiculos()
         {
-            Console.Clear();
+            
             // Como no podemos enumerar directamente una PriorityQueue, clonamos para mostrar
             var copiaVehiculos = new List<VehiculoClass.Vehiculo>();
 
@@ -49,6 +49,7 @@ namespace CarreteraClass
             }
 
             // Mostrar y reconstruir la cola
+            Console.SetCursorPosition(0,0);
             foreach (var v in copiaVehiculos)
             {
                 string estado = v.Parado ? "Esperando" : v.Acabado ? "Finalizado" : "Cruzando";

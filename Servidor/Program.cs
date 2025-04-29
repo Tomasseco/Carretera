@@ -60,12 +60,12 @@ namespace Servidor
 
                     Vehiculo nuevoVehiculo = NetworkStreamClass.LeerDatosVehiculoNS(ns);
                     Console.WriteLine($"Vehículo recibido: ID={nuevoVehiculo.Id}, Dirección={nuevoVehiculo.Direccion}, Velocidad={nuevoVehiculo.Velocidad}");
-
+                    Console.Clear();
                     lock (lockCarretera)
                     {
                         carretera.AñadirVehiculo(nuevoVehiculo);
-                        Console.WriteLine("Vehículo añadido a la carretera.");
                         carretera.MostrarVehiculos();
+                        EnviarCarreteraATodos();
                     }
 
                     bool terminado = false;
@@ -77,6 +77,7 @@ namespace Servidor
                         {
                             carretera.ActualizarVehiculo(vehiculoActualizado);
                             carretera.MostrarVehiculos();
+                            EnviarCarreteraATodos();
                         }
 
                         if (vehiculoActualizado.Acabado)
@@ -92,5 +93,41 @@ namespace Servidor
                 }
             }
         }
+
+      static void EnviarCarreteraATodos()
+        {
+            lock (lockClientes)
+            {
+                // Creamos una lista para clientes desconectados
+                List<Cliente> clientesDesconectados = new List<Cliente>();
+
+                foreach (var cliente in clientesConectados)
+                {
+                    try
+                    {
+                        if (cliente.NS != null && cliente.NS.CanWrite)
+                        {
+                            NetworkStreamClass.EscribirDatosCarreteraNS(cliente.NS, carretera);
+                        }
+                        else
+                        {
+                            clientesDesconectados.Add(cliente);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        clientesDesconectados.Add(cliente);
+                    }
+                }
+
+                // Eliminamos los clientes que fallaron
+                foreach (var cliente in clientesDesconectados)
+                {
+                    clientesConectados.Remove(cliente);
+                    Console.WriteLine($"Cliente ID {cliente.Id} desconectado y eliminado de la lista.");
+                }
+            }
+        }
+
     }
 }

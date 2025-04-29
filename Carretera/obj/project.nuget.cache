@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "YqbHANfOi8I=",
+  "dgSpecHash": "AknKqShWt0E=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\Carretera\\Carretera\\Carretera.csproj",
+  "projectFilePath": "C:\\Users\\Programacion\\Desktop\\M09-UF3-Pr01\\Practica\\carretera\\Carretera\\Carretera.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Programacion\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.36\\microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
     "C:\\Users\\Programacion\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.36\\microsoft.windowsdesktop.app.ref.6.0.36.nupkg.sha512",

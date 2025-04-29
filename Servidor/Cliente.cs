@@ -4,13 +4,13 @@ namespace Servidor
 {
     public class Cliente
     {
-        public int Id { get; set; }
-        public NetworkStream Stream { get; set; }
+        public int Id { get; }
+        public NetworkStream NS { get; }
 
-        public Cliente(int id, NetworkStream stream)
+        public Cliente(int id, NetworkStream ns)
         {
             Id = id;
-            Stream = stream;
+            NS = ns;
         }
     }
 }
