@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using NetworkStreamNS;
 using VehiculoClass;
+using CarreteraClass;
 
 namespace Client
 {
@@ -31,14 +32,38 @@ namespace Client
                 Vehiculo miVehiculo = new Vehiculo(int.Parse(idRecibido), "Norte");
                 NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
 
+                Thread hiloEscucha = new Thread(() =>
+                {
+                    try
+                    {
+                        while (true)
+                        {
+                            Carretera carreteraRecibida = NetworkStreamClass.LeerDatosCarreteraNS(ns);
+
+                            Console.Clear();
+                            foreach (var v in carreteraRecibida.ObtenerListaVehiculos())
+                            {
+                                string estado = v.Parado ? "Esperando" : v.Acabado ? "Finalizado" : "Cruzando";
+                                string progreso = new string('█', v.Pos / 10) + new string('▒', 10 - (v.Pos / 10));
+                                Console.WriteLine($"[{v.Direccion}] Vehículo #{v.Id}: {progreso} (km {v.Pos} - {estado})");
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        // Ignorar errores cuando el servidor deja de enviar
+                    }
+                });
+
+                hiloEscucha.IsBackground = true;
+                hiloEscucha.Start();
+
                 while (!miVehiculo.Acabado)
                 {
                     miVehiculo.Pos++;
 
                     if (miVehiculo.Pos >= 100)
-                    {
                         miVehiculo.Acabado = true;
-                    }
 
                     NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
 
