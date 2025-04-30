@@ -29,7 +29,13 @@ namespace Client
 
                 Console.WriteLine("Handshake completado. Creando vehículo...");
 
-                Vehiculo miVehiculo = new Vehiculo(int.Parse(idRecibido), "Norte");
+                // Asignar dirección aleatoria y velocidad aleatoria
+                Random rnd = new Random();
+                string[] direcciones = { "Norte", "Sur" };
+                string direccion = direcciones[rnd.Next(direcciones.Length)];
+                int velocidad = rnd.Next(500, 1001); 
+
+                Vehiculo miVehiculo = new Vehiculo(int.Parse(idRecibido), direccion);
                 NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
 
                 Thread hiloEscucha = new Thread(() =>
@@ -41,9 +47,17 @@ namespace Client
                             Carretera carreteraRecibida = NetworkStreamClass.LeerDatosCarreteraNS(ns);
 
                             Console.Clear();
-                            foreach (var v in carreteraRecibida.ObtenerListaVehiculos())
+                           foreach (var v in carreteraRecibida.ObtenerListaVehiculos())
                             {
-                                string estado = v.Parado ? "Esperando" : v.Acabado ? "Finalizado" : "Cruzando";
+                                string estado;
+
+                                if (v.Acabado)
+                                    estado = "Finalizado";
+                                else if (v.Parado)
+                                    estado = "Esperando";
+                                else
+                                    estado = "Cruzando";
+
                                 string progreso = new string('█', v.Pos / 10) + new string('▒', 10 - (v.Pos / 10));
                                 Console.WriteLine($"[{v.Direccion}] Vehículo #{v.Id}: {progreso} (km {v.Pos} - {estado})");
                             }
@@ -51,7 +65,7 @@ namespace Client
                     }
                     catch
                     {
-                        // Ignorar errores cuando el servidor deja de enviar
+                    
                     }
                 });
 
@@ -60,12 +74,15 @@ namespace Client
 
                 while (!miVehiculo.Acabado)
                 {
-                    miVehiculo.Pos++;
+                    if (!miVehiculo.Parado)
+                    {
+                        miVehiculo.Pos++;
 
-                    if (miVehiculo.Pos >= 100)
-                        miVehiculo.Acabado = true;
+                        if (miVehiculo.Pos >= 100)
+                            miVehiculo.Acabado = true;
 
-                    NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
+                        NetworkStreamClass.EscribirDatosVehiculoNS(ns, miVehiculo);
+                    }
 
                     Thread.Sleep(miVehiculo.Velocidad);
                 }

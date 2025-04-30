@@ -47,6 +47,11 @@ namespace VehiculoClass
             }
         }
 
+        public bool EstaEnPuente()
+        {
+            return Pos >= 30 && Pos <= 50;
+        }
+
         // Permite serializar Vehiculo a array de bytes mediante formato XML
         public byte[] VehiculoaBytes()
         {

@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using NetworkStreamNS;
@@ -16,12 +18,15 @@ namespace Servidor
         static Carretera carretera = new Carretera();
         static object lockCarretera = new object();
 
+        // Sincronización del puente
+        static int? vehiculoEnPuenteId = null;
+        static object lockPuente = new object();
+
         static void Main(string[] args)
         {
             Console.WriteLine("Iniciando servidor...");
             listener = new TcpListener(IPAddress.Any, 5000);
             listener.Start();
-
             Console.WriteLine("Servidor esperando conexiones...");
 
             while (true)
@@ -35,7 +40,6 @@ namespace Servidor
         static void GestionarCliente(TcpClient clienteTcp)
         {
             Console.WriteLine("Vehículo conectado. Gestionando nuevo vehículo...");
-
             NetworkStream ns = clienteTcp.GetStream();
             int idAsignado;
 
@@ -61,6 +65,7 @@ namespace Servidor
                     Vehiculo nuevoVehiculo = NetworkStreamClass.LeerDatosVehiculoNS(ns);
                     Console.WriteLine($"Vehículo recibido: ID={nuevoVehiculo.Id}, Dirección={nuevoVehiculo.Direccion}, Velocidad={nuevoVehiculo.Velocidad}");
                     Console.Clear();
+
                     lock (lockCarretera)
                     {
                         carretera.AñadirVehiculo(nuevoVehiculo);
@@ -72,6 +77,39 @@ namespace Servidor
                     while (!terminado)
                     {
                         Vehiculo vehiculoActualizado = NetworkStreamClass.LeerDatosVehiculoNS(ns);
+
+                        lock (lockPuente)
+                        {
+                            if (vehiculoActualizado.Pos >= 30 && vehiculoActualizado.Pos <= 50)
+                            {
+                                while (vehiculoEnPuenteId != null && vehiculoEnPuenteId != vehiculoActualizado.Id)
+                                {
+                                    vehiculoActualizado.Parado = true;
+
+                                    lock (lockCarretera)
+                                    {
+                                        carretera.ActualizarVehiculo(vehiculoActualizado);
+                                        carretera.MostrarVehiculos();
+                                        EnviarCarreteraATodos();
+                                    }
+
+                                    Monitor.Wait(lockPuente);
+                                }
+
+                                vehiculoEnPuenteId = vehiculoActualizado.Id;
+                                vehiculoActualizado.Parado = false;
+                            }
+                            else
+                            {
+                                if (vehiculoEnPuenteId == vehiculoActualizado.Id && vehiculoActualizado.Pos > 50)
+                                {
+                                    vehiculoEnPuenteId = null;
+                                    Monitor.PulseAll(lockPuente);
+                                }
+
+                                vehiculoActualizado.Parado = false;
+                            }
+                        }
 
                         lock (lockCarretera)
                         {
@@ -94,11 +132,10 @@ namespace Servidor
             }
         }
 
-      static void EnviarCarreteraATodos()
+        static void EnviarCarreteraATodos()
         {
             lock (lockClientes)
             {
-                // Creamos una lista para clientes desconectados
                 List<Cliente> clientesDesconectados = new List<Cliente>();
 
                 foreach (var cliente in clientesConectados)
@@ -120,7 +157,6 @@ namespace Servidor
                     }
                 }
 
-                // Eliminamos los clientes que fallaron
                 foreach (var cliente in clientesDesconectados)
                 {
                     clientesConectados.Remove(cliente);
@@ -128,6 +164,5 @@ namespace Servidor
                 }
             }
         }
-
     }
 }
